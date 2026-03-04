@@ -1,0 +1,24 @@
+#title {
+    text-align: center;
+    text-style: bold;
+    padding: 1;
+}
+
+#metadata {
+    border: round $accent;
+    padding: 1 2;
+    margin: 1 2;
+    height: auto;   
+}
+
+#body {
+    border: round $primary;
+    padding: 1 2;
+    margin: 1 2;
+    height: auto;
+    overflow: auto;
+}
+
+#mail-container {
+    height: 1fr;
+}

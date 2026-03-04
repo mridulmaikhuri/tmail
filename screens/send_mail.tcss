@@ -1,0 +1,33 @@
+#title {
+    text-align: center;
+    text-style: bold;
+    padding: 1;
+}
+
+#compose-container {
+    height: 1fr;
+}
+
+#to-container,
+#subject-container {
+    padding: 1 2;
+}
+
+#body-heading {
+    padding: 0 2;
+}
+
+#subject, #to {
+    border: round $accent;
+}
+
+#body {
+    margin: 0 2;
+    border: round $accent;
+}
+
+#buttons {
+    align-horizontal: center;
+    padding: 1;
+    height: auto;
+}
