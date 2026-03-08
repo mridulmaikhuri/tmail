@@ -39,8 +39,9 @@ The application integrates with the **Gmail API** using OAuth authentication and
 
 Below are screenshots of the different interfaces of the application.
 
-Note:
-For privacy reasons, the Read Mail (Inbox) screenshot uses mock email data instead of real Gmail messages. The actual application fetches emails directly from your Gmail account using the Gmail API after authentication.
+**Note:**  
+* For privacy reasons, the **Read Mail (Inbox)** screenshot uses **mock email data** instead of real Gmail messages.  
+* The actual application fetches emails directly from your Gmail account using the **Gmail API after authentication**.
 
 ---
 
@@ -50,8 +51,6 @@ This is the first screen shown when launching the application.
 
 ![Main Menu](screenshots/main_menu.png)
 
-*(Paste screenshot of the main menu here)*
-
 ---
 
 ## Inbox View
@@ -59,8 +58,6 @@ This is the first screen shown when launching the application.
 Displays the list of emails fetched from Gmail. Users can navigate through emails using the arrow keys.
 
 ![Inbox View](screenshots/inbox_view.png)
-
-*(Paste screenshot of the inbox screen here)*
 
 ---
 
@@ -70,8 +67,6 @@ Shows the full content of a selected email in a scrollable viewer.
 
 ![Email Viewer](screenshots/email_viewer.png)
 
-*(Paste screenshot of the email viewing screen here)*
-
 ---
 
 ## Compose Email
@@ -79,8 +74,6 @@ Shows the full content of a selected email in a scrollable viewer.
 Interface used to write and send a new email.
 
 ![Compose Email](screenshots/compose_email.png)
-
-*(Paste screenshot of the email compose screen here)*
 
 ---
 
@@ -98,6 +91,12 @@ Interface used to write and send a new email.
 
 ```
 tmail/
+│
+├── screenshots/
+│   ├── main_menu.png
+│   ├── inbox_view.png
+│   ├── email_viewer.png
+│   └── compose_email.png
 │
 ├── app.py
 │
@@ -244,6 +243,16 @@ Navigate using the arrow keys and press **Enter** to select an option.
 4. View the full email content
 5. Press `p` to return to the inbox
 6. Use **Send Mail** to compose and send a new email
+
+---
+
+# Notes
+
+* The first time the application runs, you will be asked to **authorize access to your Gmail account** through a browser window.
+* The OAuth credentials file downloaded from Google Cloud must be placed in the **root project directory**.
+* After successful authentication, an authentication token will be generated and reused for future sessions.
+* Make sure the **Gmail API is enabled** in your Google Cloud project before running the application.
+* This application currently supports **basic email reading and sending functionality only**.
 
 ---
 
