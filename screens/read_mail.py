@@ -3,8 +3,9 @@ from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
 from services.read_mail import read_mails
 from screens.view_mail import ViewMail
+from screens.mock_emails import mock_emails
 
-mock_emails = read_mails()
+#mock_emails = read_mails()
 
 def format_row(no, sender, subject, date):
     no = no[:10].ljust(10)

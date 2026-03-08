@@ -35,6 +35,55 @@ The application integrates with the **Gmail API** using OAuth authentication and
 
 ---
 
+# Screenshots
+
+Below are screenshots of the different interfaces of the application.
+
+Note:
+For privacy reasons, the Read Mail (Inbox) screenshot uses mock email data instead of real Gmail messages. The actual application fetches emails directly from your Gmail account using the Gmail API after authentication.
+
+---
+
+## Main Menu
+
+This is the first screen shown when launching the application.
+
+![Main Menu](screenshots/main_menu.png)
+
+*(Paste screenshot of the main menu here)*
+
+---
+
+## Inbox View
+
+Displays the list of emails fetched from Gmail. Users can navigate through emails using the arrow keys.
+
+![Inbox View](screenshots/inbox_view.png)
+
+*(Paste screenshot of the inbox screen here)*
+
+---
+
+## Email Viewer
+
+Shows the full content of a selected email in a scrollable viewer.
+
+![Email Viewer](screenshots/email_viewer.png)
+
+*(Paste screenshot of the email viewing screen here)*
+
+---
+
+## Compose Email
+
+Interface used to write and send a new email.
+
+![Compose Email](screenshots/compose_email.png)
+
+*(Paste screenshot of the email compose screen here)*
+
+---
+
 # Technologies Used
 
 * **Python**
@@ -212,4 +261,4 @@ Navigate using the arrow keys and press **Enter** to select an option.
 
 # License
 
-This project is intended for educational and learning purposes.
+This project is intended for **educational and learning purposes**.
