@@ -23,13 +23,13 @@ def get_body(payload):
             if text:
                 texts.append(text)
         elif mime_type == "text/html":
-            texts.append("[HTML content]")
+            texts.append("(HTML content)")
         elif "parts" in part:
             for subpart in part["parts"]:
                 parse_part(subpart)
         else:
             if mime_type:
-                texts.append(f"[{mime_type} Content]")
+                texts.append(f"({mime_type} Content)")
     
     parse_part(payload)
     res = []
@@ -39,9 +39,16 @@ def get_body(payload):
             seen.add(line)
             res.append(line)
     
+    body = "(No Body)"
+    attach = "(No Attachments)"
+    if len(texts) > 0:
+        body = "\n".join(res).strip()
+    if len(attachments) > 0:
+        attach = attachments
+    
     return {
-        "text": "\n".join(res).strip(),
-        "attachments": attachments
+        "body": body,
+        "attachments": attach
     }
     
 def read_mails(max_results=10):
@@ -52,6 +59,7 @@ def read_mails(max_results=10):
         maxResults=max_results
     ).execute()
     messages = results.get("messages", [])
+    
     mails = []
     for msg in messages:
         message = service.users().messages().get(
@@ -60,7 +68,8 @@ def read_mails(max_results=10):
         ).execute()
         
         headers = message["payload"]["headers"]
-        sender = subject = date = ""
+        
+        sender, subject, date = None, None, None
         for h in headers:
             if h["name"] == "From":
                 sender = h["value"]
@@ -68,19 +77,23 @@ def read_mails(max_results=10):
                 subject = h["value"]
             elif h["name"] == "Date":
                 date = h["value"]
-                
+        
+        sender = (sender or "").strip() or "(No Sender)"
+        subject = (subject or "").strip() or "(No Subject)"
+        date = (date or "").strip() or "(No Date)"       
         body = get_body(message["payload"])
         
         mails.append(
             {
                 "id": msg["id"],
                 "sender": sender,
-                "subject": subject or "[No subject]",
+                "subject": subject,
                 "date": date,
-                "body": body["text"] or "[No body]",
-                "attachments": body["attachments"] or "[No attachments]"
+                "body": body["body"],
+                "attachments": body["attachments"]
             }
         )
+        
     return mails
 
 if __name__ == "__main__":

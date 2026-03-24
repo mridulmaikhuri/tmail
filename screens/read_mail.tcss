@@ -1,0 +1,42 @@
+Screen {
+    background: #1e1e1e;
+    color: #ffffff;
+}
+
+/* General text spacing */
+Static {
+    padding: 0 1;
+}
+
+/* Header + footer */
+Header, Footer {
+    color: #ffffff;
+}
+
+/* Title */
+.title {
+    padding: 1 1;
+    text-style: bold;
+}
+
+/* Table header */
+.header {
+    padding: 0 1;
+    text-style: bold;
+}
+
+/* List container */
+#mail_list {
+    height: 1fr;
+    padding: 0;
+}
+
+/* Each row */
+ListItem {
+    padding: 0 1;
+}
+
+/* Focused row */
+ListItem:focus {
+    background: #444444;
+}

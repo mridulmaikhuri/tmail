@@ -14,6 +14,7 @@ class ViewMail(Screen):
         self.email = email
         
     def compose(self) -> ComposeResult:
+        print(f"DEBUG ViewMail: subject = '{self.email['subject']}'")
         yield Header()
         
         yield Vertical(
