@@ -9,8 +9,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.send",
 ]
-TOKEN_PATH = "services/token.json"
-CREDENTIALS_PATH = "services/credentials.json"
+
+BASE_DIR = os.path.dirname(__file__)
+TOKEN_PATH = os.path.join(BASE_DIR, "token.json")
+CREDENTIALS_PATH = os.path.join(BASE_DIR, "credentials.json")
 
 def get_gmail_service():
     creds = None
