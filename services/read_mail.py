@@ -23,13 +23,13 @@ def get_body(payload):
             if text:
                 texts.append(text)
         elif mime_type == "text/html":
-            texts.append("HTML content omitted")
+            texts.append("[HTML content]")
         elif "parts" in part:
             for subpart in part["parts"]:
                 parse_part(subpart)
         else:
             if mime_type:
-                texts.append(f"{mime_type} Content")
+                texts.append(f"[{mime_type} Content]")
     
     parse_part(payload)
     res = []
@@ -75,10 +75,10 @@ def read_mails(max_results=10):
             {
                 "id": msg["id"],
                 "sender": sender,
-                "subject": subject,
+                "subject": subject or "[No subject]",
                 "date": date,
-                "body": body["text"] or "No body found in mail",
-                "attachments": body["attachments"]
+                "body": body["text"] or "[No body]",
+                "attachments": body["attachments"] or "[No attachments]"
             }
         )
     return mails
@@ -92,3 +92,4 @@ if __name__ == "__main__":
         print(f"subject: {mail["subject"]}")
         print(f"date: {mail["date"]}")
         print(f"body: {mail["body"]}")
+        print(f"attachment: {mail["attachments"]}")

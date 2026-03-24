@@ -13,7 +13,7 @@ class TmailApp(App):
         yield Header()
         yield Static("Use arrow keys to move, Enter to select\n")
         yield OptionList(
-            Option("Read unread mail", id="read"),
+            Option("Unread mail", id="read"),
             Option("Send mail", id="send"),
             Option("Exit", id="exit"),
             id="menu"
