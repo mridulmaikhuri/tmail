@@ -4,10 +4,6 @@
     text-style: bold;   
 }
 
-Screen {
-    text-align: center;
-}
-
 #header_row {
     background: #2a2a2a;
 }
