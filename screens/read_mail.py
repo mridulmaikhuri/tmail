@@ -3,12 +3,13 @@ from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
 from services.read_mail import read_mails
 from screens.view_mail import ViewMail
+from screens.mock_emails import mock_emails
 
 def format_row(no, sender, subject, date):
-    no = no[:10].strip().ljust(10)
-    sender = sender[:25].strip().ljust(25)
-    subject = subject[:40].strip().ljust(40)
-    date = date[:16].strip().ljust(16)
+    no = no[:10].replace('[', '(').replace(']', ')').ljust(10)
+    sender = sender[:25].replace('[', '(').replace(']', ')').ljust(25)
+    subject = subject[:40].replace('[', '(').replace(']', ')').ljust(40)
+    date = date[:16].replace('[', '(').replace(']', ')').ljust(16)
     return f"{no} | {sender} | {subject} | {date}"
 
 class ReadMail(Screen):
@@ -19,10 +20,9 @@ class ReadMail(Screen):
     
     def __init__(self):
         super().__init__()
-        self.mails = []
+        self.mails = mock_emails
     
     def on_mount(self):
-        self.mails = read_mails()
         list_view = self.query_one("#mail_list", ListView)
 
         for i, mail in enumerate(self.mails):
@@ -35,12 +35,12 @@ class ReadMail(Screen):
             list_view.append(ListItem(Label(row), id=f"email-{i}"))
 
     def compose(self) -> ComposeResult:
-        header_row = format_row("S.No", "Sender", "Subject", "Date")
-            
         yield Header()
-        yield Static("Inbox\n")
-        yield Static(header_row)
-        yield Static("-" * len(header_row))
+        yield Static("Inbox\n", id="inbox")
+        yield Static(
+            format_row("No", "Sender", "Subject", "Date"),
+            id="header_row"
+        )
         yield ListView(id="mail_list")
         yield Footer()
         
