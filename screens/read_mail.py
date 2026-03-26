@@ -5,21 +5,23 @@ from services.read_mail import read_mails
 from screens.view_mail import ViewMail
 from screens.mock_emails import mock_emails
 from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll
+from textwrap import dedent
 
-def format_row(no, sender, subject, date):
-    no = no[:4].replace('[', '(').replace(']', ')').ljust(4)
-    sender = sender[:18].replace('[', '(').replace(']', ')').ljust(18)
-    subject = subject[:25].replace('[', '(').replace(']', ')').ljust(25)
-    date = date[:10].replace('[', '(').replace(']', ')').ljust(10)
+def format_row(no, sender, subject, date, no_len = 10, sender_len = 20, subject_len = 30, date_len = 16):
+    no = no[:no_len].replace('[', '(').replace(']', ')').ljust(no_len)
+    sender = sender[:sender_len].replace('[', '(').replace(']', ')').ljust(sender_len)
+    subject = subject[:subject_len].replace('[', '(').replace(']', ')').ljust(subject_len)
+    date = date[:date_len].replace('[', '(').replace(']', ')').ljust(date_len)
     return f"{no} | {sender} | {subject} | {date}"
 
 class PreviewMail(VerticalGroup):
-    def __init__(self, email):
-        super().__init__()
+    def __init__(self, email, **kwargs):
+        super().__init__(**kwargs)
         self.email = email
         
     def compose(self) -> ComposeResult:
         yield Vertical(
+            Static("Email Preview", id="title"),
             Container(
                 Static(f"From   : {self.email['sender']}"),
                 Static(f"Subject: {self.email['subject']}"),
@@ -27,14 +29,17 @@ class PreviewMail(VerticalGroup):
                 id="metadata"
             ),
             Container(
-                Static(self.email['body'])
+                Static(self.email['body']),
+                id='body'
             )
         )
 
 class MailList(VerticalGroup):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.mails = mock_emails
+        for mail in self.mails:
+            mail['body'] = dedent(mail['body'])
     
     def on_mount(self):
         list_view = self.query_one("#mail_list", ListView)
@@ -61,7 +66,8 @@ class MailList(VerticalGroup):
 class ReadMail(Screen):
     CSS_PATH = "read_mail.tcss"
     BINDINGS = [
-        ("p", "prev", "Back")
+        ("p", "prev", "Back"),
+        ("v", "preview", "Preview")
     ]
     
     def __init__(self):
@@ -69,20 +75,9 @@ class ReadMail(Screen):
         self.mails = mock_emails
     
     def on_mount(self):
-        mailList = self.query_one(MailList)
-        self.set_focus(mailList)
-    
-    # def on_mount(self):
-    #     list_view = self.query_one("#mail_list", ListView)
-
-    #     for i, mail in enumerate(self.mails):
-    #         row = format_row(
-    #             str(i + 1),
-    #             mail["sender"],
-    #             mail["subject"],
-    #             mail["date"]
-    #         )
-    #         list_view.append(ListItem(Label(row), id=f"email-{i}"))
+        # sets the focus on mail list when we enter the screen
+        list_view = self.query_one("#mail_list", ListView)
+        self.set_focus(list_view)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -98,9 +93,18 @@ class ReadMail(Screen):
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         idx = int(event.item.id.removeprefix("email-"))
         self.app.push_screen(ViewMail(self.mails[idx]))
+    
+    def action_preview(self) -> None:
+        # shows preview mail pane
+        preview_mail = self.query_one(PreviewMail)
+        preview_mail.toggle_class("show")
+        
+        # fixes styling of inbox
+        
+        
 
 if __name__ == "__main__":
-    mails = read_mails()
+    mails = mock_emails
     print(len(mails))
     for mail in mails:
         print(f"id: {mail["id"]}")
@@ -108,5 +112,5 @@ if __name__ == "__main__":
         print(f"subject: {mail["subject"]}")
         print(f"date: {mail["date"]}")
         print(f"body: {mail["body"]}")
-        print(f"attachment: {mail["attachments"]}")
+        #print(f"attachment: {mail["attachments"]}")
         

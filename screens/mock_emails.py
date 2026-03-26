@@ -6,20 +6,20 @@ mock_emails = [
         "date": "2026-02-20 09:14",
         "snippet": "A contributor opened a pull request in your project.",
         "body": """
-            Hello Mridul,
+        Hello Mridul,
 
-            A new pull request has been opened in your repository:
+        A new pull request has been opened in your repository:
 
-            Repository: terminal-mail-client
-            Title: Add OAuth authentication flow
+        Repository: terminal-mail-client
+        Title: Add OAuth authentication flow
 
-            Please review the changes and merge if appropriate.
+        Please review the changes and merge if appropriate.
 
-            You can view the pull request here:
-            https://github.com/example/repo/pull/42
+        You can view the pull request here:
+        https://github.com/example/repo/pull/42
 
-            Best,
-            GitHub Notifications
+        Best,
+        GitHub Notifications
         """
     },
 
@@ -30,19 +30,19 @@ mock_emails = [
         "date": "2026-02-18 22:05",
         "snippet": "Your rating has changed after Codeforces Round #1079.",
         "body": """
-            Hello Mridul,
+        Hello Mridul,
 
-            Your rating has been updated after Codeforces Round #1079.
+        Your rating has been updated after Codeforces Round #1079.
 
-            Previous Rating: 1412
-            New Rating: 1478
-            Rank: Specialist
+        Previous Rating: 1412
+        New Rating: 1478
+        Rank: Specialist
 
-            Congratulations on your performance!
+        Congratulations on your performance!
 
-            Keep practicing and participating in contests.
+        Keep practicing and participating in contests.
 
-            Codeforces Team
+        Codeforces Team
         """
     },
 
@@ -53,19 +53,19 @@ mock_emails = [
         "date": "2026-02-17 14:12",
         "snippet": "Your account was debited for a recent purchase.",
         "body": """
-            Dear Customer,
+        Dear Customer,
 
-            A transaction of ₹4,500 has been debited from your account.
+        A transaction of ₹4,500 has been debited from your account.
 
-            Merchant: Amazon India
-            Date: 17 Feb 2026
-            Time: 14:10 IST
+        Merchant: Amazon India
+        Date: 17 Feb 2026
+        Time: 14:10 IST
 
-            If this transaction was not performed by you, please contact
-            our support immediately.
+        If this transaction was not performed by you, please contact
+        our support immediately.
 
-            Thank you,
-            SecureBank
+        Thank you,
+        SecureBank
         """
     },
 
@@ -76,19 +76,19 @@ mock_emails = [
         "date": "2026-02-16 08:30",
         "snippet": "AI engineering, Rust adoption, and edge computing.",
         "body": """
-            Hello Subscriber,
+        Hello Subscriber,
 
-            Here are the top programming trends this week:
+        Here are the top programming trends this week:
 
-            1. AI-powered developer tools
-            2. Rust adoption in system-level programming
-            3. Rise of edge computing
-            4. Terminal-based developer tools
+        1. AI-powered developer tools
+        2. Rust adoption in system-level programming
+        3. Rise of edge computing
+        4. Terminal-based developer tools
 
-            Read the full article here:
-            https://techweekly.com/articles/programming-trends-2026
+        Read the full article here:
+        https://techweekly.com/articles/programming-trends-2026
 
-            TechWeekly Team
+        TechWeekly Team
         """
     },
 
@@ -99,21 +99,21 @@ mock_emails = [
         "date": "2026-02-15 19:45",
         "snippet": "Reminder: Submit your SDN routing ML project.",
         "body": """
-            Dear Student,
+        Dear Student,
 
-            This is a reminder that your project submission deadline is approaching.
+        This is a reminder that your project submission deadline is approaching.
 
-            Project Title:
-            Machine Learning-Based Routing in Software Defined Networks
+        Project Title:
+        Machine Learning-Based Routing in Software Defined Networks
 
-            Deadline:
-            25 February 2026
+        Deadline:
+        25 February 2026
 
-            Please upload your project report and code repository before
-            the deadline.
+        Please upload your project report and code repository before
+        the deadline.
 
-            Best regards,
-            Department of Computer Science
+        Best regards,
+        Department of Computer Science
         """
     }
 ]

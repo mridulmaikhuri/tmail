@@ -7,3 +7,32 @@
 #header_row {
     background: #2a2a2a;
 }
+
+#metadata {
+    border: round $accent;
+    padding: 1 2;
+    margin: 1 2;
+    height: auto;   
+}
+
+#body {
+    border: round $primary;
+    height: auto;
+    padding: 1 2;
+    margin: 1 2;
+    overflow: auto;
+}
+
+#title {
+    text-align: center;
+    text-style: bold;
+    padding: 1;
+}
+
+PreviewMail {
+    display: none;
+}
+
+PreviewMail.show {
+    display: block;
+}
