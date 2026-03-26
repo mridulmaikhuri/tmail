@@ -15,7 +15,7 @@
     height: auto;   
 }
 
-#body {
+#body-container {
     border: round $primary;
     height: auto;
     padding: 1 2;

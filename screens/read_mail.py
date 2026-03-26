@@ -28,16 +28,24 @@ class PreviewMail(VerticalGroup):
         yield Vertical(
             Static("Email Preview", id="title"),
             Container(
-                Static(f"From   : {self.email['sender']}"),
-                Static(f"Subject: {self.email['subject']}"),
-                Static(f"Date   : {self.email['date']}"),
+                Static(f"From   : {self.email['sender']}", id="from"),
+                Static(f"Subject: {self.email['subject']}", id="subject"),
+                Static(f"Date   : {self.email['date']}", id="date"),
                 id="metadata"
             ),
             Container(
-                Static(self.email['body']),
-                id='body'
+                Static(self.email['body'], id='body'),
+                id='body-container'
             )
         )
+    
+    def update_mail(self, mail):
+        self.email = mail
+        
+        self.query_one("#from").update(f"From   : {self.email['sender']}")
+        self.query_one("#subject").update(f"Subject: {self.email['subject']}")
+        self.query_one("#date").update(f"Date   : {self.email['date']}")
+        self.query_one("#body").update(self.email["body"])
 
 class MailList(VerticalGroup):
     def __init__(self, **kwargs):
@@ -84,7 +92,7 @@ class ReadMail(Screen):
         yield Header()
         yield HorizontalScroll(
             MailList(),
-            PreviewMail(self.mails[0]),
+            PreviewMail(self.mails[0], id="preview"),
         )
         yield Footer()
         
@@ -94,6 +102,13 @@ class ReadMail(Screen):
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         idx = int(event.item.id.removeprefix("email-"))
         self.app.push_screen(ViewMail(self.mails[idx]))
+    
+    def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
+        idx = int(event.item.id.removeprefix("email-"))
+        mail = self.mails[idx]
+        
+        preview = self.query_one("#preview")
+        preview.update_mail(mail)
     
     def action_preview(self) -> None:
         preview_mail = self.query_one(PreviewMail)
