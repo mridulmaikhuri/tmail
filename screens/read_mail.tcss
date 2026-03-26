@@ -36,3 +36,39 @@ PreviewMail {
 PreviewMail.show {
     display: block;
 }
+
+.col {
+    padding: 0 1;
+}
+
+.no {
+    width: 6
+}
+
+.sender {
+    width: 30;
+}
+
+.subject {
+    width: 50;
+}
+
+.date {
+    width: 30;
+}
+
+.compact .sender {
+    width: 15;
+}
+
+.compact .subject {
+    width: 30;
+}
+
+.compact .date {
+    width: 15;
+}
+
+ListItem {
+    height: 2;
+}

@@ -4,16 +4,21 @@ from textual.app import ComposeResult
 from services.read_mail import read_mails
 from screens.view_mail import ViewMail
 from screens.mock_emails import mock_emails
-from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll
+from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup
 from textwrap import dedent
 
-def format_row(no, sender, subject, date, no_len = 10, sender_len = 20, subject_len = 30, date_len = 16):
-    no = no[:no_len].replace('[', '(').replace(']', ')').ljust(no_len)
-    sender = sender[:sender_len].replace('[', '(').replace(']', ')').ljust(sender_len)
-    subject = subject[:subject_len].replace('[', '(').replace(']', ')').ljust(subject_len)
-    date = date[:date_len].replace('[', '(').replace(']', ')').ljust(date_len)
-    return f"{no} | {sender} | {subject} | {date}"
-
+class MailRow(HorizontalGroup):
+    def __init__(self, mail, index, **kwargs):
+        super().__init__(**kwargs)
+        self.mail = mail
+        self.idx = index
+    
+    def compose(self) -> ComposeResult:
+        yield Label(self.idx, classes="col no")
+        yield Label(self.mail["sender"], classes="col sender")
+        yield Label(self.mail["subject"], classes="col subject")
+        yield Label(self.mail["date"], classes="col date")
+        
 class PreviewMail(VerticalGroup):
     def __init__(self, email, **kwargs):
         super().__init__(**kwargs)
@@ -45,19 +50,15 @@ class MailList(VerticalGroup):
         list_view = self.query_one("#mail_list", ListView)
 
         for i, mail in enumerate(self.mails):
-            row = format_row(
-                str(i + 1),
-                mail["sender"],
-                mail["subject"],
-                mail["date"]
-            )
-            list_view.append(ListItem(Label(row), id=f"email-{i}"))
+            item = ListItem(MailRow(mail, str(i + 1)), id=f"email-{i}")
+            list_view.append(item)
             
     def compose(self) -> ComposeResult:
         yield Vertical(
             Static("Inbox\n", id="inbox"),
-            Static(
-                format_row("S.no", "Sender", "Subject", "Date"),
+            MailRow(
+                {"sender": "Sender", "subject": "Subject", "date": "Date"},
+                index="S.no",
                 id="header_row"
             ),
             ListView(id="mail_list")
@@ -95,12 +96,14 @@ class ReadMail(Screen):
         self.app.push_screen(ViewMail(self.mails[idx]))
     
     def action_preview(self) -> None:
-        # shows preview mail pane
         preview_mail = self.query_one(PreviewMail)
+        mail_list = self.query_one(MailList)
+        
+        # shows preview mail pane
         preview_mail.toggle_class("show")
         
         # fixes styling of inbox
-        
+        mail_list.toggle_class("compact")
         
 
 if __name__ == "__main__":
