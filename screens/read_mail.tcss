@@ -42,19 +42,19 @@ PreviewMail.show {
 }
 
 .no {
-    width: 6
+    width: 6;
 }
 
 .sender {
-    width: 30;
+    width: 25;
 }
 
 .subject {
-    width: 50;
+    width: 40;
 }
 
 .date {
-    width: 30;
+    width: 20;
 }
 
 .compact .sender {

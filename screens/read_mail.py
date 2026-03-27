@@ -1,9 +1,7 @@
 from textual.screen import Screen
 from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
-from services.read_mail import read_mails
 from screens.view_mail import ViewMail
-from screens.mock_emails import mock_emails
 from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup
 from textwrap import dedent
 
@@ -20,37 +18,39 @@ class MailRow(HorizontalGroup):
         yield Label(self.mail["date"], classes="col date")
         
 class PreviewMail(VerticalGroup):
-    def __init__(self, email, **kwargs):
+    def __init__(self, mail, **kwargs):
         super().__init__(**kwargs)
-        self.email = email
+        self.mail = mail
         
     def compose(self) -> ComposeResult:
         yield Vertical(
             Static("Email Preview", id="title"),
             Container(
-                Static(f"From   : {self.email['sender']}", id="from"),
-                Static(f"Subject: {self.email['subject']}", id="subject"),
-                Static(f"Date   : {self.email['date']}", id="date"),
+                Static(f"From   :", id="from"),
+                Static(f"Subject:", id="subject"),
+                Static(f"Date   :", id="date"),
                 id="metadata"
             ),
             Container(
-                Static(self.email['body'], id='body'),
+                Static(id='body'),
                 id='body-container'
             )
         )
     
     def update_mail(self, mail):
-        self.email = mail
+        self.mail = mail
         
-        self.query_one("#from").update(f"From   : {self.email['sender']}")
-        self.query_one("#subject").update(f"Subject: {self.email['subject']}")
-        self.query_one("#date").update(f"Date   : {self.email['date']}")
-        self.query_one("#body").update(self.email["body"])
+        self.query_one("#from").update(f"From   : {self.mail['sender']}")
+        self.query_one("#subject").update(f"Subject: {self.mail['subject']}")
+        self.query_one("#date").update(f"Date   : {self.mail['date']}")
+        self.query_one("#body").update(self.mail["body"])
+        
+        self.refresh()
 
 class MailList(VerticalGroup):
-    def __init__(self, **kwargs):
+    def __init__(self, mails, **kwargs):
         super().__init__(**kwargs)
-        self.mails = mock_emails
+        self.mails = mails
         for mail in self.mails:
             mail['body'] = dedent(mail['body'])
     
@@ -58,7 +58,7 @@ class MailList(VerticalGroup):
         list_view = self.query_one("#mail_list", ListView)
 
         for i, mail in enumerate(self.mails):
-            item = ListItem(MailRow(mail, str(i + 1)), id=f"email-{i}")
+            item = ListItem(MailRow(mail, str(i + 1)), id=f"mail-{i}")
             list_view.append(item)
             
     def compose(self) -> ComposeResult:
@@ -79,20 +79,25 @@ class ReadMail(Screen):
         ("v", "preview", "Preview")
     ]
     
-    def __init__(self):
+    def __init__(self, mails):
         super().__init__()
-        self.mails = mock_emails
+        self.mails = mails
     
     def on_mount(self):
         # sets the focus on mail list when we enter the screen
         list_view = self.query_one("#mail_list", ListView)
         self.set_focus(list_view)
+    
+    def on_show(self) -> None:
+        # Clear any lingering styles from ViewMail screen
+        body = self.query_one("#body", Static)
+        body.set_styles("border: none; padding: 0; margin: 0;")
 
     def compose(self) -> ComposeResult:
         yield Header()
         yield HorizontalScroll(
-            MailList(),
-            PreviewMail(self.mails[0], id="preview"),
+            MailList(self.mails),
+            PreviewMail(mail=None, id="preview"),
         )
         yield Footer()
         
@@ -100,11 +105,11 @@ class ReadMail(Screen):
         self.app.pop_screen()
         
     def on_list_view_selected(self, event: ListView.Selected) -> None:
-        idx = int(event.item.id.removeprefix("email-"))
+        idx = int(event.item.id.removeprefix("mail-"))
         self.app.push_screen(ViewMail(self.mails[idx]))
     
     def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
-        idx = int(event.item.id.removeprefix("email-"))
+        idx = int(event.item.id.removeprefix("mail-"))
         mail = self.mails[idx]
         
         preview = self.query_one("#preview")
@@ -119,16 +124,4 @@ class ReadMail(Screen):
         
         # fixes styling of inbox
         mail_list.toggle_class("compact")
-        
-
-if __name__ == "__main__":
-    mails = mock_emails
-    print(len(mails))
-    for mail in mails:
-        print(f"id: {mail["id"]}")
-        print(f"sender: {mail["sender"]}")
-        print(f"subject: {mail["subject"]}")
-        print(f"date: {mail["date"]}")
-        print(f"body: {mail["body"]}")
-        #print(f"attachment: {mail["attachments"]}")
         

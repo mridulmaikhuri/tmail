@@ -3,18 +3,24 @@ from textual.widgets import Static, OptionList, Footer, Header
 from textual.widgets.option_list import Option
 from screens.read_mail import ReadMail
 from screens.send_mail import SendMail
+from screens.mock_emails import mock_emails
+from services.read_mail import read_mails
 
 class TmailApp(App):
     BINDINGS = [
         ("q", "quit_app", "Exit")
     ]
     
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.mails = mock_emails
+    
     def compose(self) -> ComposeResult:
         yield Header()
         yield Static("Use arrow keys to move, Enter to select\n")
         yield OptionList(
-            Option("Unread mail", id="read"),
-            Option("Send mail", id="send"),
+            Option(f"Unread Mails ({len(self.mails)})", id="read"),
+            Option("Send Mail", id="send"),
             Option("Exit", id="exit"),
             id="menu"
         )
@@ -23,9 +29,9 @@ class TmailApp(App):
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         option_id = event.option.id
         if option_id == "read":
-            self.push_screen(ReadMail())
+            self.push_screen(ReadMail(self.mails))
         elif option_id == "send":
-            self.push_screen(SendMail()  )
+            self.push_screen(SendMail())
         elif option_id == "exit":
             self.exit()
             

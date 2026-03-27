@@ -26,16 +26,12 @@ class ViewMail(Screen):
                 id="metadata"
             ),
 
-            RichLog(id="body"),
+            Static(self.email['body'], id="body"),
 
             id="mail-container"
         )
         
         yield Footer()
-    
-    def on_mount(self, event):
-        body = self.query_one("#body", RichLog)
-        body.write(self.email["body"])
     
     def action_prev(self) -> None:
         self.app.pop_screen()
