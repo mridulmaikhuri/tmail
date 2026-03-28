@@ -14,6 +14,7 @@ class TmailApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mails = mock_emails
+        #self.mails = read_mails()
     
     def compose(self) -> ComposeResult:
         yield Header()

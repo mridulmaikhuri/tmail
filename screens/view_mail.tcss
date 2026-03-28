@@ -22,3 +22,10 @@
 #mail-container {
     height: 1fr;
 }
+
+#link {
+    padding: 1 2;
+    margin: 1 2;
+    border: round $accent;
+    width: 100%;
+}

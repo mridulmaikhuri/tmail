@@ -90,7 +90,8 @@ def read_mails(max_results=10):
                 "subject": subject,
                 "date": date,
                 "body": body["body"],
-                "attachments": body["attachments"]
+                "attachments": body["attachments"],
+                "link": f"https://mail.google.com/mail/u/0/#inbox/{msg['id']}"
             }
         )
         
@@ -106,3 +107,4 @@ if __name__ == "__main__":
         print(f"date: {mail["date"]}")
         print(f"body: {mail["body"]}")
         print(f"attachment: {mail["attachments"]}")
+        print(f"link: {mail['link']}")

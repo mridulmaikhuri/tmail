@@ -1,5 +1,5 @@
 from textual.screen import Screen
-from textual.widgets import Header, Footer, Static, RichLog
+from textual.widgets import Header, Footer, Static, Link
 from textual.containers import Vertical, Container
 from textual.app import ComposeResult
 
@@ -27,6 +27,8 @@ class ViewMail(Screen):
             ),
 
             Static(self.email['body'], id="body"),
+            
+            Link('Click to open mail in Browser or Press Enter', url=self.email['attachment'], tooltip='Click me', id='link'),
 
             id="mail-container"
         )

@@ -20,7 +20,8 @@ mock_emails = [
 
         Best,
         GitHub Notifications
-        """
+        """,
+        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
     },
 
     {
@@ -43,7 +44,8 @@ mock_emails = [
         Keep practicing and participating in contests.
 
         Codeforces Team
-        """
+        """,
+        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
     },
 
     {
@@ -66,7 +68,8 @@ mock_emails = [
 
         Thank you,
         SecureBank
-        """
+        """,
+        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
     },
 
     {
@@ -89,7 +92,8 @@ mock_emails = [
         https://techweekly.com/articles/programming-trends-2026
 
         TechWeekly Team
-        """
+        """,
+        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
     },
 
     {
@@ -114,6 +118,7 @@ mock_emails = [
 
         Best regards,
         Department of Computer Science
-        """
+        """,
+        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
     }
 ]
