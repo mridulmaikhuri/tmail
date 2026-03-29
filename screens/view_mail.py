@@ -28,7 +28,7 @@ class ViewMail(Screen):
 
             Static(self.email['body'], id="body"),
             
-            Link('Click to open mail in Browser or Press Enter', url=self.email['attachment'], tooltip='Click me', id='link'),
+            Link('Click to open mail in Browser or Press Enter', url=self.email['link'], tooltip='Click me', id='link'),
 
             id="mail-container"
         )

@@ -11,8 +11,12 @@ def get_body(payload):
         filename = part.get("filename", "")
         
         # attachments
-        if filename:
-            attachments.append(filename)
+        if filename and body.get("attachmentId"):
+            attachments.append({
+                "filename": filename,
+                "mimeType": part.get("mimeType"),
+                "attachmentId": body['attachmentId']
+            })
             return
         
         data = body.get("data")

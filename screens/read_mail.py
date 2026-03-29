@@ -3,7 +3,6 @@ from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
 from screens.view_mail import ViewMail
 from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup
-from textwrap import dedent
 
 class MailRow(HorizontalGroup):
     def __init__(self, mail, index, **kwargs):
@@ -51,8 +50,6 @@ class MailList(VerticalGroup):
     def __init__(self, mails, **kwargs):
         super().__init__(**kwargs)
         self.mails = mails
-        for mail in self.mails:
-            mail['body'] = dedent(mail['body'])
     
     def on_mount(self):
         list_view = self.query_one("#mail_list", ListView)

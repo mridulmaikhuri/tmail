@@ -21,7 +21,12 @@ mock_emails = [
         Best,
         GitHub Notifications
         """,
-        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
+        "link": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56",
+        "attachment": [{
+            'filename': 'Notice.pdf', 'mimeType': 'application/pdf', 
+            'attachmentId': 
+            'ANGjdJ9A5vYScaYCAL5hG8owLEY8Hlb2BatRY2cgo9M96YQNKCAhFYy_m1ACKUSpPBVK7R6-YHplY4nxH0YApc-T3vS87r9g_hDv9TDqobmKoJEbB3UZUmJZtZSgTOeLQipXGpwfeu62C2lE2NfX5ENdnasLO0zAPZL3mR2DNwklqimFOElg-2h_YeDwrSF82Z8oqRhpSrk4-yV0mXrBTp2DRxxKmIsJTkmTt6FGOOevAV-GMTEiTb6x5VhUEweC8IbQBFARzQpmCMkQhVw9MWeOCPWA6KDdNR7lpeCWGCXNQY-ZaD4T-Wk8XpAAPPkYG7uuvldU62LjcoyBf8-DCLDQioI8SLhkkRqdOD6fA0_6du6JKiAXK9dbnbuC3ct2T5hdV3wQHDxZecD7xbPv'
+        }]
     },
 
     {
@@ -45,7 +50,12 @@ mock_emails = [
 
         Codeforces Team
         """,
-        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
+        "link": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56",
+        "attachment": [{
+            'filename': 'Notice.pdf', 'mimeType': 'application/pdf', 
+            'attachmentId': 
+            'ANGjdJ9A5vYScaYCAL5hG8owLEY8Hlb2BatRY2cgo9M96YQNKCAhFYy_m1ACKUSpPBVK7R6-YHplY4nxH0YApc-T3vS87r9g_hDv9TDqobmKoJEbB3UZUmJZtZSgTOeLQipXGpwfeu62C2lE2NfX5ENdnasLO0zAPZL3mR2DNwklqimFOElg-2h_YeDwrSF82Z8oqRhpSrk4-yV0mXrBTp2DRxxKmIsJTkmTt6FGOOevAV-GMTEiTb6x5VhUEweC8IbQBFARzQpmCMkQhVw9MWeOCPWA6KDdNR7lpeCWGCXNQY-ZaD4T-Wk8XpAAPPkYG7uuvldU62LjcoyBf8-DCLDQioI8SLhkkRqdOD6fA0_6du6JKiAXK9dbnbuC3ct2T5hdV3wQHDxZecD7xbPv'
+        }]
     },
 
     {
@@ -69,7 +79,12 @@ mock_emails = [
         Thank you,
         SecureBank
         """,
-        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
+        "link": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56",
+        "attachment": [{
+            'filename': 'Notice.pdf', 'mimeType': 'application/pdf', 
+            'attachmentId': 
+            'ANGjdJ9A5vYScaYCAL5hG8owLEY8Hlb2BatRY2cgo9M96YQNKCAhFYy_m1ACKUSpPBVK7R6-YHplY4nxH0YApc-T3vS87r9g_hDv9TDqobmKoJEbB3UZUmJZtZSgTOeLQipXGpwfeu62C2lE2NfX5ENdnasLO0zAPZL3mR2DNwklqimFOElg-2h_YeDwrSF82Z8oqRhpSrk4-yV0mXrBTp2DRxxKmIsJTkmTt6FGOOevAV-GMTEiTb6x5VhUEweC8IbQBFARzQpmCMkQhVw9MWeOCPWA6KDdNR7lpeCWGCXNQY-ZaD4T-Wk8XpAAPPkYG7uuvldU62LjcoyBf8-DCLDQioI8SLhkkRqdOD6fA0_6du6JKiAXK9dbnbuC3ct2T5hdV3wQHDxZecD7xbPv'
+        }]
     },
 
     {
@@ -93,7 +108,12 @@ mock_emails = [
 
         TechWeekly Team
         """,
-        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
+        "link": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56",
+        "attachment": [{
+            'filename': 'Notice.pdf', 'mimeType': 'application/pdf', 
+            'attachmentId': 
+            'ANGjdJ9A5vYScaYCAL5hG8owLEY8Hlb2BatRY2cgo9M96YQNKCAhFYy_m1ACKUSpPBVK7R6-YHplY4nxH0YApc-T3vS87r9g_hDv9TDqobmKoJEbB3UZUmJZtZSgTOeLQipXGpwfeu62C2lE2NfX5ENdnasLO0zAPZL3mR2DNwklqimFOElg-2h_YeDwrSF82Z8oqRhpSrk4-yV0mXrBTp2DRxxKmIsJTkmTt6FGOOevAV-GMTEiTb6x5VhUEweC8IbQBFARzQpmCMkQhVw9MWeOCPWA6KDdNR7lpeCWGCXNQY-ZaD4T-Wk8XpAAPPkYG7uuvldU62LjcoyBf8-DCLDQioI8SLhkkRqdOD6fA0_6du6JKiAXK9dbnbuC3ct2T5hdV3wQHDxZecD7xbPv'
+        }]
     },
 
     {
@@ -119,6 +139,11 @@ mock_emails = [
         Best regards,
         Department of Computer Science
         """,
-        "attachment": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56"
+        "link": "https://mail.google.com/mail/u/0/#inbox/19d2e07df1c65f56",
+        "attachment": [{
+            'filename': 'Notice.pdf', 'mimeType': 'application/pdf', 
+            'attachmentId': 
+            'ANGjdJ9A5vYScaYCAL5hG8owLEY8Hlb2BatRY2cgo9M96YQNKCAhFYy_m1ACKUSpPBVK7R6-YHplY4nxH0YApc-T3vS87r9g_hDv9TDqobmKoJEbB3UZUmJZtZSgTOeLQipXGpwfeu62C2lE2NfX5ENdnasLO0zAPZL3mR2DNwklqimFOElg-2h_YeDwrSF82Z8oqRhpSrk4-yV0mXrBTp2DRxxKmIsJTkmTt6FGOOevAV-GMTEiTb6x5VhUEweC8IbQBFARzQpmCMkQhVw9MWeOCPWA6KDdNR7lpeCWGCXNQY-ZaD4T-Wk8XpAAPPkYG7uuvldU62LjcoyBf8-DCLDQioI8SLhkkRqdOD6fA0_6du6JKiAXK9dbnbuC3ct2T5hdV3wQHDxZecD7xbPv'
+        }]
     }
 ]

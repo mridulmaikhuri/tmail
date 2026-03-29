@@ -5,6 +5,7 @@ from screens.read_mail import ReadMail
 from screens.send_mail import SendMail
 from screens.mock_emails import mock_emails
 from services.read_mail import read_mails
+from textwrap import dedent
 
 class TmailApp(App):
     BINDINGS = [
@@ -14,6 +15,8 @@ class TmailApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mails = mock_emails
+        for mail in self.mails:
+            mail['body'] = dedent(mail['body'])
         #self.mails = read_mails()
     
     def compose(self) -> ComposeResult:
