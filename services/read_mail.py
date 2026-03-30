@@ -1,6 +1,26 @@
 import base64
 from services.authenticate import get_gmail_service
 
+def decode_base64url(data):
+    data = data.replace('-', '+').replace('_', '/')
+    return base64.b64decode(data)
+
+def download_attachment(msg_id, attachment_id, filename):
+    service = get_gmail_service()
+    
+    attachment = service.users().messages().attachments().get(
+        userId="me",
+        messageId=msg_id,
+        id=attachment_id
+    ).execute()
+    
+    file_data = decode_base64url(attachment["data"])
+    
+    with open(filename, "wb") as f:
+        f.write(file_data)
+    
+    return filename
+
 def get_body(payload):
     texts = []
     attachments = []
