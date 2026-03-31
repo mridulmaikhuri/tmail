@@ -1,6 +1,6 @@
 from textual.screen import Screen
 from textual.widgets import Header, Footer, Static, Link, ListView, ListItem, Label
-from textual.containers import Vertical, Container
+from textual.containers import VerticalScroll, Container
 from textual.app import ComposeResult
 from services.read_mail import download_attachment
 
@@ -18,32 +18,34 @@ class ViewMail(Screen):
     def compose(self) -> ComposeResult:
         yield Header()
         
-        with Vertical():
-            Static("📧 Email Viewer", id="title"),
+        with VerticalScroll(id="mail-container"):
+            yield Static("📧 Email Viewer", id="title")
 
-            Container(
+            yield Container(
                 Static(f"From   : {self.email['sender']}"),
                 Static(f"Subject: {self.email['subject']}"),
                 Static(f"Date   : {self.email['date']}"),
                 id="metadata"
-            ),
+            )
 
-            Static(self.email['body'], id="body"),
+            yield Static(self.email['body'], id="body")
             
             if (self.email['attachments']):
-                yield Static('Attachments')
                 self.attachment_list = ListView(
                     *[
                         ListItem(Label(attachment['filename'])) for attachment in self.email['attachments']
-                    ]
+                    ],
+                    id="attachment-list"
                 )
                 yield self.attachment_list
             else:
-                yield Static('No Attachments')
+                yield Static('No Attachments', id='no-attachment')
             
-            Link('Click to open mail in Browser or Press Enter', url=self.email['link'], tooltip='Click me', id='link'),
-
-            id="mail-container"
+            yield Container(
+                Link('Click to open mail in Browser or Press Enter', 
+                     url=self.email['link'], tooltip='Click me', id='link'),
+                id='link-container'
+            )
         
         yield Footer()
     

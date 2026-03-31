@@ -1,31 +1,55 @@
 #title {
     text-align: center;
     text-style: bold;
-    padding: 1;
+    color: $text;
+    width: 100%;
 }
 
 #metadata {
     border: round $accent;
-    padding: 1 2;
-    margin: 1 2;
-    height: auto;   
+    margin: 0 1;
+    padding: 0 1;
+    height: auto;
+    background: $boost;
 }
 
 #body {
     border: round $primary;
-    padding: 1 2;
-    margin: 1 2;
+    padding: 0 1;
+    margin: 0 1;
     height: auto;
+    background: $panel;
+}
+
+#attachment-list {
+    margin: 0 1;
+    border: round $primary;
+    height: 3;
     overflow: auto;
 }
 
-#mail-container {
-    height: 1fr;
+#attachment-list ListItem {
+    padding: 0 1;
+    margin: 0;
+    height: auto;
+}
+
+#no-attachment {
+    padding: 0 1;
+    margin: 1;
+    border: round $primary;
+    text-align: center;
+    text-style: italic;
+    background: $panel;
+    color: $text-muted;
 }
 
 #link {
-    padding: 1 2;
-    margin: 1 2;
+    margin: 0 1;
+    padding: 0 1;
     border: round $accent;
-    width: 100%;
+    text-align: center;
+    background: $boost;
+    text-style: underline;
+    width: auto;
 }

@@ -1,5 +1,6 @@
 import base64
 from services.authenticate import get_gmail_service
+from pathlib import Path
 
 def decode_base64url(data):
     data = data.replace('-', '+').replace('_', '/')
@@ -16,7 +17,12 @@ def download_attachment(msg_id, attachment_id, filename):
     
     file_data = decode_base64url(attachment["data"])
     
-    with open(filename, "wb") as f:
+    downloads_dir = Path.home() / "Downloads"
+    downloads_dir.mkdir(parents=True, exist_ok=True)
+    
+    file_path = downloads_dir / filename
+    
+    with open(file_path, "wb") as f:
         f.write(file_data)
     
     return filename
