@@ -15,6 +15,9 @@ class ViewMail(Screen):
         super().__init__()
         self.email = email
         
+    def on_mount(self):
+        self.BINDINGS.get("d").enabled = False
+        
     def compose(self) -> ComposeResult:
         yield Header()
         
@@ -48,6 +51,8 @@ class ViewMail(Screen):
             )
         
         yield Footer()
+    
+    def on_list_view_highlighted(self, event: )
     
     def action_prev(self) -> None:
         self.app.pop_screen()

@@ -4,6 +4,7 @@ from textual.app import ComposeResult
 from screens.view_mail import ViewMail
 from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup
 
+
 class MailRow(HorizontalGroup):
     def __init__(self, mail, index, **kwargs):
         super().__init__(**kwargs)
@@ -22,19 +23,23 @@ class PreviewMail(VerticalGroup):
         self.mail = mail
         
     def compose(self) -> ComposeResult:
-        yield Vertical(
-            Static("Email Preview", id="title"),
-            Container(
+        #TODO: Implement functionality to view attachments and download them from preview.
+        #TODO: Implement functionality to open mail in browser from preview.
+        #TODO: Make some keybindings conditional which means that they should only activate when certain conditions are met
+        #TODO: Based upon this implement keybindings for downloading attachment and opening mail in browser.
+        with Vertical():
+            yield Static("Email Preview", id="title")
+            yield Container(
                 Static(f"From   :", id="from"),
                 Static(f"Subject:", id="subject"),
                 Static(f"Date   :", id="date"),
                 id="metadata"
-            ),
-            Container(
+            )
+            yield Container(
                 Static(id='body'),
                 id='body-container'
             )
-        )
+        
     
     def update_mail(self, mail):
         self.mail = mail
@@ -88,7 +93,7 @@ class ReadMail(Screen):
     def on_show(self) -> None:
         # Clear any lingering styles from ViewMail screen
         body = self.query_one("#body", Static)
-        body.set_styles("border: none; padding: 0; margin: 0;")
+        body.set_styles("border: none; padding: 0; margin: 0;background: transparent;")
 
     def compose(self) -> ComposeResult:
         yield Header()

@@ -10,23 +10,21 @@
 
 #metadata {
     border: round $accent;
-    padding: 1 2;
-    margin: 1 2;
+    padding: 0 1;
+    margin: 0 1;
     height: auto;   
 }
 
 #body-container {
     border: round $primary;
     height: auto;
-    padding: 1 2;
-    margin: 1 2;
-    overflow: auto;
+    padding: 0 1;
+    margin: 0 1;
 }
 
 #title {
     text-align: center;
     text-style: bold;
-    padding: 1;
 }
 
 PreviewMail {
