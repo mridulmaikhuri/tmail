@@ -1,7 +1,6 @@
 #title {
     text-align: center;
     text-style: bold;
-    color: $text;
     width: 100%;
 }
 
@@ -10,7 +9,6 @@
     margin: 0 1;
     padding: 0 1;
     height: auto;
-    background: $boost;
 }
 
 #body {
@@ -18,7 +16,6 @@
     padding: 0 1;
     margin: 0 1;
     height: auto;
-    background: $panel;
 }
 
 #attachment-list {
@@ -50,6 +47,13 @@
     border: round $accent;
     text-align: center;
     background: $boost;
-    text-style: underline;
     width: auto;
+}
+
+#link:hover {
+    text-style: bold underline;
+}
+
+#link:focus {
+    text-style: bold underline;
 }

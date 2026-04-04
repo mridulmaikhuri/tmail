@@ -15,9 +15,6 @@ class ViewMail(Screen):
         super().__init__()
         self.email = email
         
-    def on_mount(self):
-        self.BINDINGS.get("d").enabled = False
-        
     def compose(self) -> ComposeResult:
         yield Header()
         
@@ -46,13 +43,11 @@ class ViewMail(Screen):
             
             yield Container(
                 Link('Click to open mail in Browser or Press Enter', 
-                     url=self.email['link'], tooltip='Click me', id='link'),
+                     url=self.email['link'], tooltip='Open in Browser', id='link'),
                 id='link-container'
             )
         
         yield Footer()
-    
-    def on_list_view_highlighted(self, event: )
     
     def action_prev(self) -> None:
         self.app.pop_screen()
