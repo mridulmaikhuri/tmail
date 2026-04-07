@@ -36,8 +36,6 @@
     margin: 1;
     border: round $primary;
     text-align: center;
-    text-style: italic;
-    background: $panel;
     color: $text-muted;
 }
 
@@ -46,7 +44,6 @@
     padding: 0 1;
     border: round $accent;
     text-align: center;
-    background: $boost;
     width: auto;
 }
 

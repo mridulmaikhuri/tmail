@@ -2,7 +2,7 @@ from textual.screen import Screen
 from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
 from screens.view_mail import ViewMail
-from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup
+from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup, VerticalScroll
 
 
 class MailRow(HorizontalGroup):
@@ -23,11 +23,7 @@ class PreviewMail(VerticalGroup):
         self.mail = mail
         
     def compose(self) -> ComposeResult:
-        #TODO: Implement functionality to view attachments and download them from preview.
-        #TODO: Implement functionality to open mail in browser from preview.
-        #TODO: Make some keybindings conditional which means that they should only activate when certain conditions are met
-        #TODO: Based upon this implement keybindings for downloading attachment and opening mail in browser.
-        with Vertical():
+        with VerticalScroll():
             yield Static("Email Preview", id="title")
             yield Container(
                 Static(f"From   :", id="from"),
