@@ -6,38 +6,75 @@ import re
 from bs4 import BeautifulSoup
 
 def decode_base64url(data):
+    # base64 => bytes => readable text
     if not data:
         return ""
+    
+    # add extra = because len(data) should be multiple of 4 and = gets ignored during decoding phase
     padded = data + '=' * (4 - len(data) % 4)
+    
     return base64.urlsafe_b64decode(padded).decode("utf-8", errors="ignore")
 
 def download_attachment(msg_id, attachment_id, filename):
-    service = get_gmail_service()
-    
-    attachment = service.users().messages().attachments().get(
-        userId="me",
-        messageId=msg_id,
-        id=attachment_id
-    ).execute()
-    
-    file_data = decode_base64url(attachment["data"])
-    
-    downloads_dir = Path.home() / "Downloads"
-    downloads_dir.mkdir(parents=True, exist_ok=True)
-    
-    file_path = downloads_dir / filename
-    
-    with open(file_path, "wb") as f:
-        f.write(file_data)
-    
-    return filename
+    try:
+        service = get_gmail_service()
+        
+        attachment = service.users().messages().attachments().get(
+            userId="me",
+            messageId=msg_id,
+            id=attachment_id
+        ).execute()
+        
+        data = attachment.get("data")
+        if not data:
+            return False, "Attachment not found", ""
+        
+        file_data = base64.urlsafe_b64decode(data)
+        
+        downloads_dir = Path.home() / "Downloads"
+        downloads_dir.mkdir(parents=True, exist_ok=True)
+        
+        file_path = downloads_dir / filename
+        
+        with open(file_path, "wb") as f:
+            f.write(file_data)
+        
+        return True, "", str(file_path)
+    except Exception as e:
+        return False, str(e), ""
 
 def clean_text(text):
-    # remove excessive newlines
-    text = re.sub(r'\n\s*\n+', '\n\n', text)
+    # Replace unnecessary unicode chars with empty string
+    text = re.sub(r'[\u2000-\u200F\u2028-\u202F\u2060-\u206F\u00A0\u00AD]', '', text)
     
-    # replace tabs with single space
+     # Normalize line endings
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    
+    # Replace tabs with single space
     text = text.replace('\t', ' ')
+    
+    # Remove leading/trailing spaces from each line
+    lines = [line.strip() for line in text.split('\n')]
+    
+    # Remove empty lines (but keep paragraph spacing)
+    cleaned_lines = []
+    prev_empty = False
+    for line in lines:
+        if line == "":
+            if not prev_empty:
+                cleaned_lines.append("")
+            prev_empty = True
+        else:
+            cleaned_lines.append(line)
+            prev_empty = False
+    
+    # Join back
+    text = "\n".join(cleaned_lines)
+    
+    # Final cleanup: collapse excessive newlines again and weird unicode characters
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    
+    text = re.sub(r'[ ]{2,}', ' ', text)
     
     return text.strip()
 
@@ -76,10 +113,8 @@ def get_body(payload):
                 html = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
                 soup = BeautifulSoup(html, "html.parser")
                 text = clean_text(soup.get_text())
-                html_texts.append(text)
-                # converter.ignore_links = False
-                # converter.body_width = 0 
-                # html_texts.append(converter.handle(decoded).strip())
+                if text:
+                    html_texts.append(text)
     
     parts = payload.get('parts')
     if parts:
@@ -98,13 +133,9 @@ def get_body(payload):
         elif mime_type == "text/html" and data:
             html = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
             soup = BeautifulSoup(html, "html.parser")
-            text = clean_text(soup.get_text())
-            html_texts.append(text)
-            # decoded = decode_base64url(data)
-            # converter = html2text.HTML2Text()
-            # converter.ignore_links = False
-            # converter.body_width = 0 
-            # html_texts.append(converter.handle(decoded).strip())
+            text = clean_text(soup.get_text( ))
+            if text:
+                html_texts.append(text)
     
     if plain_texts:
         texts.extend(plain_texts)

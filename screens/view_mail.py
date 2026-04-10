@@ -61,10 +61,13 @@ class ViewMail(Screen):
         
         filename = attachment['filename']
         
-        download_attachment(
+        res, err, file_path = download_attachment(
             self.email['id'],
             attachment['attachmentId'],
             filename
         )
         
-        self.notify(f'Downloaded: {filename}')
+        if res == True:
+            self.notify(f'Downloaded at: {file_path}')
+        else:
+            self.notify(f"An error occured: {err}", severity='error')
