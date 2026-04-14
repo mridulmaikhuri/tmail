@@ -41,10 +41,11 @@ class ViewMail(Screen):
             else:
                 yield Static('No Attachments', id='no-attachment')
             
-            yield Container(
-                Link('Click to open mail in Browser or Press Enter', 
-                     url=self.email['link'], tooltip='Open in Browser', id='link'),
-                id='link-container'
+            yield Link(
+                'Click to open mail in Browser or Press Enter',
+                url=self.email['link'],
+                tooltip='Open in Browser',
+                id='link'
             )
         
         yield Footer()

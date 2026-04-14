@@ -5,16 +5,6 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 from bs4 import BeautifulSoup
 
-def decode_base64url(data):
-    # base64 => bytes => readable text
-    if not data:
-        return ""
-    
-    # add extra = because len(data) should be multiple of 4 and = gets ignored during decoding phase
-    padded = data + '=' * (4 - len(data) % 4)
-    
-    return base64.urlsafe_b64decode(padded).decode("utf-8", errors="ignore")
-
 def download_attachment(msg_id, attachment_id, filename):
     try:
         service = get_gmail_service()
@@ -44,14 +34,20 @@ def download_attachment(msg_id, attachment_id, filename):
         return False, str(e), ""
 
 def clean_text(text):
-    # Replace unnecessary unicode chars with empty string
+    # Replace unnecessary unicode chars with empty string 
     text = re.sub(r'[\u2000-\u200F\u2028-\u202F\u2060-\u206F\u00A0\u00AD]', '', text)
     
-     # Normalize line endings
+    # Remove ALL invisible / zero-width characters
+    text = re.sub(r'[\u200B-\u200F\u202A-\u202F\u2060-\u206F\uFEFF\u034f]', '', text)
+
+    # Replace non-breaking space with normal space
+    text = text.replace('\u00A0', ' ')
+    
+    # Normalize line endings
     text = text.replace('\r\n', '\n').replace('\r', '\n')
     
     # Replace tabs with single space
-    text = text.replace('\t', ' ')
+    text = re.sub(r'[ \t]+', ' ', text)
     
     # Remove leading/trailing spaces from each line
     lines = [line.strip() for line in text.split('\n')]
@@ -73,8 +69,6 @@ def clean_text(text):
     
     # Final cleanup: collapse excessive newlines again and weird unicode characters
     text = re.sub(r'\n{3,}', '\n\n', text)
-    
-    text = re.sub(r'[ ]{2,}', ' ', text)
     
     return text.strip()
 
@@ -105,7 +99,7 @@ def get_body(payload):
             data = body.get("data")
             
             if mime_type == "text/plain" and data:
-                decoded = decode_base64url(data)
+                decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
                 text = clean_text(decoded.strip())
                 if text:
                     plain_texts.append(text)
@@ -126,14 +120,14 @@ def get_body(payload):
         data = body.get("data")
         
         if mime_type == "text/plain" and data:
-            decoded = decode_base64url(data)
+            decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
             text = clean_text(decoded.strip())
             if text:
                 plain_texts.append(text)
         elif mime_type == "text/html" and data:
             html = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
             soup = BeautifulSoup(html, "html.parser")
-            text = clean_text(soup.get_text( ))
+            text = clean_text(soup.get_text())
             if text:
                 html_texts.append(text)
     
@@ -141,7 +135,6 @@ def get_body(payload):
         texts.extend(plain_texts)
     elif html_texts:
         texts.extend(html_texts)
-    
     res = []
     seen = set()
     for line in texts:
@@ -157,48 +150,6 @@ def get_body(payload):
         "body": body,
         "attachments": attachments
     }
-
-cache = {}
-
-def fetch_message(msg_id):
-    if msg_id in cache:
-        return cache[msg_id]
-    
-    service = get_gmail_service()
-    message = service.users().messages().get(
-        userId="me",
-        id=msg_id
-    ).execute()
-    
-    headers = message["payload"]["headers"]
-    
-    sender, subject, date = None, None, None
-    for h in headers:
-        if h["name"] == "From":
-            sender = h["value"]
-        elif h["name"] == "Subject":
-            subject = h["value"]
-        elif h["name"] == "Date":
-            date = h["value"]
-    
-    sender = (sender or "").strip() or "(No Sender)"
-    subject = (subject or "").strip() or "(No Subject)"
-    date = (date or "").strip() or "(No Date)"       
-    body = get_body(message["payload"])
-    
-    msg = {
-        "id": msg_id,
-        "sender": sender,
-        "subject": subject,
-        "date": date,
-        "body": body["body"],
-        "attachments": body["attachments"],
-        "link": f"https://mail.google.com/mail/u/0/#inbox/{msg_id}"
-    }
-    
-    cache[msg_id] = msg
-    
-    return msg
     
 def read_mails():
     service = get_gmail_service()
@@ -214,12 +165,65 @@ def read_mails():
     if len(messages) == 0:
         return []
     
-    message_ids = []
-    for msg in messages:
-        message_ids.append(msg['id'])
+    mails = []
     
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        mails = list(executor.map(fetch_message, message_ids))
+    def cb(request_id, response, exception):
+        if exception:
+            print(f'Error for {request_id}: {exception}')
+            return
+        
+        msg_id = response['id']
+        headers = response['payload']['headers']
+        
+        sender, subject, date = None, None, None
+        for h in headers:
+            if h["name"] == "From":
+                sender = h["value"]
+            elif h["name"] == "Subject":
+                subject = h["value"]
+            elif h["name"] == "Date":
+                date = h["value"]
+        
+        sender = (sender or "").strip() or "(No Sender)"
+        subject = (subject or "").strip() or "(No Subject)"
+        date = (date or "").strip() or "(No Date)"
+        
+        res = get_body(response["payload"])
+        body = res.get('body')
+        attachments = res.get('attachments')
+        
+        link = f"https://mail.google.com/mail/u/0/#inbox/{msg_id}"    
+        
+        msg = {
+            "id": msg_id,
+            "sender": sender,
+            "subject": subject,
+            "date": date,
+            "body": body,
+            "attachments": attachments,
+            "link": link
+        }
+        
+        mails.append(msg)
+
+        return
+    
+    BATCH_SIZE = 50
+    
+    message_ids = [msg['id'] for msg in messages]
+    
+    for i in range(0, len(message_ids), BATCH_SIZE):
+        batch = service.new_batch_http_request(callback = cb)
+        for msg_id in message_ids[i: i + BATCH_SIZE]:
+            batch.add(
+                service.users().messages().get(
+                    userId = 'me',
+                    id = msg_id
+                ),
+                request_id = msg_id
+            )
+        batch.execute()
+    
     
     return mails
 
@@ -237,10 +241,12 @@ if __name__ == "__main__":
     mails = read_mails()
     print(len(mails))
     for mail in mails:
-        print(f"id: {mail["id"]}")
-        print(f"sender: {mail["sender"]}")
-        print(f"subject: {mail["subject"]}")
-        print(f"date: {mail["date"]}")
-        print(f"body: {mail["body"]}")
-        print(f"attachment: {mail["attachments"]}")
-        print(f"link: {mail['link']}")
+        print(ascii(mail['body']))
+    # for mail in mails:
+    #     print(f"id: {mail["id"]}")
+    #     print(f"sender: {mail["sender"]}")
+    #     print(f"subject: {mail["subject"]}")
+    #     print(f"date: {mail["date"]}")
+    #     print(f"body: {mail["body"]}")
+    #     print(f"attachment: {mail["attachments"]}")
+    #     print(f"link: {mail['link']}")
