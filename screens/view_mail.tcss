@@ -1,56 +1,134 @@
+Screen {
+    background: #0a0c10;
+}
+
+/* ── Header / Footer ── */
+Header, Footer {
+    background: #0a0c10;
+    color: #ffffff;
+    border: none;
+}
+
+/* ── Main Container ── */
+#mail-container {
+    padding: 1 2;
+}
+
+/* ── Title ── */
 #title {
-    text-align: center;
+    color: #5b8af5;
     text-style: bold;
-    width: 100%;
+
+    margin-bottom: 1;
+    padding-bottom: 1;
+
+    border-bottom: solid #1e2640;
 }
 
+/* ── Metadata (card style) ── */
 #metadata {
-    border: round $accent;
-    margin: 0 1;
-    padding: 0 1;
+    background: #141a2e;
+    border: round #2a344a;
+
+    padding: 1 2;
+    margin-bottom: 1;
+
     height: auto;
 }
 
+/* Metadata text */
+#metadata Static {
+    color: #ffffff;
+    height: 1;
+}
+
+/* ── Email Body ── */
 #body {
-    border: round $primary;
-    padding: 0 1;
-    margin: 0 1;
-    height: auto;
+    color: #ffffff;
+
+    padding: 1 2;
+    margin-bottom: 1;
+
+    background: #0f1420;
+    border: round #2a344a;
 }
 
+/* ── Attachments ── */
 #attachment-list {
-    margin: 0 1;
-    border: round $primary;
-    height: 3;
-    overflow: auto;
-}
+    margin-top: 1;
+    margin-bottom: 1;
 
-#attachment-list ListItem {
-    padding: 0 1;
-    margin: 0;
+    padding: 1;
+
+    border: round #2a344a;
+    background: #0f1420;
+
     height: auto;
 }
 
-#no-attachment {
-    padding: 0 1;
-    margin: 1;
-    border: round $primary;
-    text-align: center;
-    color: $text-muted;
+/* Individual attachment */
+#attachment-list > ListItem {
+    padding: 1 1;
+    color: #ffffff;
 }
 
+/* Highlighted attachment */
+#attachment-list > ListItem.--highlight {
+    background: #141a2e;
+    border-left: solid #5b8af5;
+}
+
+/* No attachment text */
+#no-attachment {
+    color: #ffffff;
+
+    margin-top: 1;
+    margin-bottom: 1;
+
+    padding: 1 1;
+
+    background: #0f1420;
+    border: round #2a344a;
+
+    content-align: left middle;
+}
+
+/* ── Link ── */
 #link {
-    margin: 0 1;
-    padding: 0 1;
-    border: round $accent;
+    margin-top: 1;
+
+    padding: 1 1;
+
+    color: #5b8af5;
+    text-style: bold;
+
+    background: #0f1420;
+    border: round #2a344a;
+
+    content-align: center middle;
     text-align: center;
-    width: auto;
 }
 
 #link:hover {
-    text-style: bold underline;
+    background: #141a2e;
+    border: round #5b8af5;
+    color: #ffffff;
 }
 
 #link:focus {
-    text-style: bold underline;
+    background: #141a2e;
+    border: round #5b8af5;
+    color: #ffffff;
+}
+
+/* Optional hover effect */
+#link:hover {
+    text-style: underline;
+}
+
+#metadata,
+#body,
+#attachment-list {
+    border: round #2a344a;
+    background: #0f1420;
 }

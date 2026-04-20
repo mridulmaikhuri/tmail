@@ -1,9 +1,18 @@
 import base64
 from services.authenticate import get_gmail_service
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 import re
 from bs4 import BeautifulSoup
+
+def mark_as_read(msg_id: str):
+    service = get_gmail_service()
+    service.users().messages().modify(
+        userId="me",
+        id=msg_id,
+        body={
+            "removeLabelIds": ["UNREAD"]
+        }
+    ).execute()
 
 def download_attachment(msg_id, attachment_id, filename):
     try:
@@ -35,45 +44,25 @@ def download_attachment(msg_id, attachment_id, filename):
 
 def clean_text(text):
     # Replace unnecessary unicode chars with empty string 
-    text = re.sub(r'[\u2000-\u200F\u2028-\u202F\u2060-\u206F\u00A0\u00AD]', '', text)
-    
-    # Remove ALL invisible / zero-width characters
-    text = re.sub(r'[\u200B-\u200F\u202A-\u202F\u2060-\u206F\uFEFF\u034f]', '', text)
-
-    # Replace non-breaking space with normal space
-    text = text.replace('\u00A0', ' ')
+    pattern = r'[\u2000-\u200F\u2028-\u202F\u2060-\u206F\u00A0\u00AD\u200B-\u200F\u202A-\u202F\u2060-\u206F\uFEFF\u034f\u00A0]'
+    text = re.sub(pattern, '', text)
     
     # Normalize line endings
-    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    text = text.replace('\r', '\n')
     
     # Replace tabs with single space
     text = re.sub(r'[ \t]+', ' ', text)
     
-    # Remove leading/trailing spaces from each line
+    # Remove leading/trailing spaces
     lines = [line.strip() for line in text.split('\n')]
+    text = "\n".join(lines)
     
-    # Remove empty lines (but keep paragraph spacing)
-    cleaned_lines = []
-    prev_empty = False
-    for line in lines:
-        if line == "":
-            if not prev_empty:
-                cleaned_lines.append("")
-            prev_empty = True
-        else:
-            cleaned_lines.append(line)
-            prev_empty = False
-    
-    # Join back
-    text = "\n".join(cleaned_lines)
-    
-    # Final cleanup: collapse excessive newlines again and weird unicode characters
+    # Remove excessive newlines
     text = re.sub(r'\n{3,}', '\n\n', text)
     
     return text.strip()
 
 def get_body(payload):
-    texts = []
     plain_texts = []
     html_texts = []
     attachments = []
@@ -88,68 +77,47 @@ def get_body(payload):
             if filename and body.get("attachmentId"):
                 attachments.append({
                     "filename": filename,
-                    "mimeType": part.get("mimeType"),
+                    "mimeType": mime_type,
                     "attachmentId": body['attachmentId']
                 })
                 continue
-                     
+            
+            # text part     
             if part.get('parts'):
                 parse_parts(part.get('parts'))
             
             data = body.get("data")
             
-            if mime_type == "text/plain" and data:
+            if not data:
+                continue
+            
+            if mime_type == "text/plain":
                 decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
                 text = clean_text(decoded.strip())
-                if text:
-                    plain_texts.append(text)
-            elif mime_type == "text/html" and data:
+                text and plain_texts.append(text)
+            elif mime_type == "text/html":
                 html = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
                 soup = BeautifulSoup(html, "html.parser")
                 text = clean_text(soup.get_text())
-                if text:
-                    html_texts.append(text)
+                text and html_texts.append(text)
     
     parts = payload.get('parts')
     if parts:
         parse_parts(parts)
     else:
-        # Handle single-part email
-        mime_type = payload.get("mimeType", "")
-        body = payload.get("body", {})
-        data = body.get("data")
-        
-        if mime_type == "text/plain" and data:
-            decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
-            text = clean_text(decoded.strip())
-            if text:
-                plain_texts.append(text)
-        elif mime_type == "text/html" and data:
-            html = base64.urlsafe_b64decode(data).decode("utf-8", errors="ignore")
-            soup = BeautifulSoup(html, "html.parser")
-            text = clean_text(soup.get_text())
-            if text:
-                html_texts.append(text)
+        parse_parts([payload])
     
+    texts = []
     if plain_texts:
         texts.extend(plain_texts)
     elif html_texts:
-        texts.extend(html_texts)
-    res = []
-    seen = set()
-    for line in texts:
-        if line not in seen:
-            seen.add(line)
-            res.append(line)
+        texts.extend(html_texts)  
     
     body = "(No Body)"
     if len(texts) > 0:
-        body = "\n".join(res).strip()
+        body = "\n".join(texts).strip()
     
-    return {
-        "body": body,
-        "attachments": attachments
-    }
+    return body, attachments
     
 def read_mails():
     service = get_gmail_service()
@@ -188,9 +156,7 @@ def read_mails():
         subject = (subject or "").strip() or "(No Subject)"
         date = (date or "").strip() or "(No Date)"
         
-        res = get_body(response["payload"])
-        body = res.get('body')
-        attachments = res.get('attachments')
+        body, attachments = get_body(response["payload"])
         
         link = f"https://mail.google.com/mail/u/0/#inbox/{msg_id}"    
         
@@ -208,7 +174,7 @@ def read_mails():
 
         return
     
-    BATCH_SIZE = 50
+    BATCH_SIZE = 30
     
     message_ids = [msg['id'] for msg in messages]
     
@@ -224,18 +190,9 @@ def read_mails():
             )
         batch.execute()
     
+    mails.sort(key=lambda x : message_ids.index(x['id']))
     
     return mails
-
-def mark_as_read(msg_id: str):
-    service = get_gmail_service()
-    service.users().messages().modify(
-        userId="me",
-        id=msg_id,
-        body={
-            "removeLabelIds": ["UNREAD"]
-        }
-    ).execute()
 
 if __name__ == "__main__":
     mails = read_mails()

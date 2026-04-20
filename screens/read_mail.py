@@ -3,7 +3,7 @@ from textual.widgets import Static, Footer, Header, ListView, ListItem, Label
 from textual.app import ComposeResult
 from screens.view_mail import ViewMail
 from textual.containers import VerticalGroup, Vertical, Container, HorizontalScroll, HorizontalGroup, VerticalScroll
-
+from services.read_mail import mark_as_read
 
 class MailRow(HorizontalGroup):
     def __init__(self, mail, index, **kwargs):
@@ -57,6 +57,7 @@ class MailList(VerticalGroup):
 
         for i, mail in enumerate(self.mails):
             item = ListItem(MailRow(mail, str(i + 1)), id=f"mail-{i}")
+            item.mail = mail
             list_view.append(item)
             
     def compose(self) -> ComposeResult:
@@ -69,6 +70,9 @@ class MailList(VerticalGroup):
             ),
             ListView(id="mail_list")
         )
+    
+    def on_screen_resume(self) -> None:
+        self.refresh_data()
 
 class ReadMail(Screen):
     CSS_PATH = "read_mail.tcss"
@@ -102,9 +106,25 @@ class ReadMail(Screen):
     def action_prev(self) -> None:
         self.app.pop_screen()
         
+    async def mark_read_worker(self, msg_id):
+        mark_as_read(msg_id)
+        
     def on_list_view_selected(self, event: ListView.Selected) -> None:
-        idx = int(event.item.id.removeprefix("mail-"))
-        self.app.push_screen(ViewMail(self.mails[idx]))
+        mail = event.item.mail
+        
+        self.app.push_screen(ViewMail(mail))
+        
+        preview_mail = self.query_one(PreviewMail)
+        mail_list = self.query_one(MailList)
+        
+        if preview_mail.has_class("show"):
+            preview_mail.toggle_class("show")
+            mail_list.toggle_class("compact")
+        
+        msg_id = mail.get('id')
+        msg_id and self.run_worker(self.mark_read_worker(msg_id))
+        
+        event.item.remove()
     
     def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
         idx = int(event.item.id.removeprefix("mail-"))

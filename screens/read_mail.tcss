@@ -1,72 +1,139 @@
+Screen {
+    color: #ffffff;
+    background: #0f1420;
+}
+
+/* ── Mail List Panel ── */
+MailList {
+    width: 1fr;
+    height: 1fr;
+
+    background: #0f1420;
+    border-right: solid #2a344a;
+}
+
+/* Inbox Title */
 #inbox {
-    background: #2a2a2a;
-    text-align: center;
-    text-style: bold;   
-}
-
-#header_row {
-    background: #2a2a2a;
-}
-
-#metadata {
-    border: round $accent;
-    padding: 0 1;
-    margin: 0 1;
-    height: auto;   
-}
-
-#body-container {
-    border: round $primary;
-    height: auto;
-    padding: 0 1;
-    margin: 0 1;
-}
-
-#title {
-    text-align: center;
+    color: #5b8af5;
     text-style: bold;
+
+    border-bottom: solid #1e2640;
+
+    text-align: center;
 }
 
-PreviewMail {
-    display: none;
+/* Header Row */
+#header_row {
+    background: #141a2e;
+    text-style: bold;
+
+    border-bottom: solid #1e2640;
 }
 
-PreviewMail.show {
-    display: block;
+/* ── Mail Rows ── */
+MailRow {
+    height: 3;
+    padding: 0 1;
+
+    border-bottom: solid #0f1420;
+
+    background: transparent;
+}
+
+MailRow:hover {
+    background: #141a2e;
+}
+
+/* Selected item */
+ListItem.--highlight {
+    background: #141a2e;
+    border-left: solid #5b8af5;
 }
 
 .col {
-    padding: 0 1;
+    padding: 1;
 }
 
+/* Serial number */
 .no {
-    width: 6;
+    width: 8;
 }
 
+/* Sender */
 .sender {
-    width: 25;
-}
-
-.subject {
-    width: 40;
-}
-
-.date {
-    width: 20;
-}
-
-.compact .sender {
-    width: 15;
-}
-
-.compact .subject {
     width: 30;
 }
 
-.compact .date {
-    width: 15;
+/* Subject */
+.subject {
+    width: 1fr;
 }
 
-ListItem {
-    height: 2;
+/* Date */
+.date {
+    width: 14;
+}
+
+/* ── ListView ── */
+ListView {
+    background: transparent;
+}
+
+/* ── Preview Pane ── */
+PreviewMail {
+    width: 0;
+    height: 1fr;
+
+    background: #0f1420;
+    border-left: solid #2a344a;
+
+    display: none;
+}
+
+/* 50–50 split */
+PreviewMail.show {
+    width: 1fr;
+    display: block;
+}
+
+MailList.compact {
+    width: 1fr;
+}
+
+/* ── Preview Scroll ── */
+PreviewMail VerticalScroll {
+    padding: 1 2;
+}
+
+/* Title */
+#title {
+    color: #5b8af5;
+    text-style: bold;
+
+    padding-bottom: 1;
+    margin-bottom: 1;
+
+    border-bottom: solid #1e2640;
+
+    text-align: center;
+}
+
+/* ── Metadata ── */
+#metadata {
+    background: #141a2e;
+    border: round #2a344a;
+
+    padding: 1;
+    margin-bottom: 1;
+}
+
+/* Metadata text */
+#metadata Static {
+    content-align: left middle;
+}
+
+/* ── Body ── */
+#body {
+    padding: 1;
+    content-align: left top;
 }

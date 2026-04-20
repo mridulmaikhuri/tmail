@@ -1,5 +1,6 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Static, OptionList, Footer, Header
+from textual.containers import Container
 from textual.widgets.option_list import Option
 from screens.read_mail import ReadMail
 from screens.send_mail import SendMail
@@ -8,6 +9,7 @@ from services.read_mail import read_mails
 from textwrap import dedent
 
 class TmailApp(App):
+    CSS_PATH = 'app.tcss'
     BINDINGS = [
         ("q", "quit_app", "Exit")
     ]
@@ -21,12 +23,24 @@ class TmailApp(App):
     
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Static("Use arrow keys to move, Enter to select\n")
-        yield OptionList(
-            Option(f"Unread Mails ({len(self.mails)})", id="read"),
-            Option("Send Mail", id="send"),
-            Option("Exit", id="exit"),
-            id="menu"
+        yield Static(
+            "████████╗███╗   ███╗ █████╗ ██╗██╗      \n"
+            "╚══██╔══╝████╗ ████║██╔══██╗██║██║      \n"
+            "   ██║   ██╔████╔██║███████║██║██║      \n"
+            "   ██║   ██║╚██╔╝██║██╔══██║██║██║      \n"
+            "   ██║   ██║ ╚═╝ ██║██║  ██║██║███████╗ \n"
+            "   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝",
+            id="brand",
+        )
+        yield Static("Use arrow keys to move, Enter to select\n", id = "subtitle")
+        yield Container(
+            OptionList(
+                Option(f"Unread Mails ({len(self.mails)})", id="read"),
+                Option("Send Mail", id="send"),
+                Option("Exit", id="exit"),
+                id="menu"
+            ),
+            id='menu-container'
         )
         yield Footer()
     
