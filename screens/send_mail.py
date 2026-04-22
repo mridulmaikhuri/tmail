@@ -12,27 +12,39 @@ class SendMail(Screen):
     
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Vertical(
-            Static("✉️ Compose Mail", id="title"),
-            Container(
-                Static("To:"),
-                Input(placeholder="recipient@example.com",id="to"),
-                id="to-container"
+
+        yield Static("󰒊 Compose Mail", id="title")
+        yield Container(
+            Vertical(
+                Container(
+                    Static("TO", classes="label"),
+                    Input(placeholder="recipient@example.com", id="to"),
+                    classes="input-group",
+                ),
+
+                Container(
+                    Static("SUBJECT", classes="label"),
+                    Input(placeholder="Subject", id="subject"),
+                    classes="input-group",
+                ),
+
+                Container(
+                    Static("BODY", classes="label"),
+                    TextArea(id="body"),
+                    classes="input-group",
+                ),
+
+                Horizontal(
+                    Button("Send", id="send", classes="btn-primary"),
+                    Button("Cancel", id="cancel", classes="btn-secondary"),
+                    id="buttons",
+                ),
+
+                id="compose-card",
             ),
-            Container(
-                Static("Subject:"),
-                Input(placeholder="Subject",id="subject"),
-                id="subject-container"
-            ),
-            Static("Body:", id="body-heading"),
-            TextArea(id="body"),
-            Horizontal(
-                Button("Send", id="send", variant="success"),
-                Button("Cancel", id="cancel", variant="error"),
-                id="buttons"
-            ),
-            id="compose-container"
+            id="compose-wrapper",
         )
+
         yield Footer()
         
     def action_prev(self) -> None:
