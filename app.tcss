@@ -19,35 +19,93 @@ Header, Footer {
     color: #5b8af5;
     text-style: bold;
 
-    margin-top: 1;
+    margin-top: 2;
 }
 
 /* Subtitle text */
 #subtitle {
     color: #6b7a99;
     content-align: center middle;
+    margin-bottom: 2;
 }
 
-/* ── Menu Container ── */
 #menu-container {
+    width: 100%;
     align: center top;
 }
 
-#menu {
+.menu-item {
+    layout: horizontal;
+
     width: 50%;
-    margin-top: 2;
-    background: #0f172a;
-    border: round #1e293b;
-    padding: 1;
+    height: auto;
+
+    padding: 1 2;
+
+    background: #0f1218;
+    border: round #2a3050;
+
+    color: #8b9ab8;
 }
 
-#menu > .option-list--option {
-    color: #94a3b8;
-    padding: 0 1;
+/* Hover (mouse) */
+.menu-item:hover {
+    background: #13171f;
+    border: round #4a6aaa;
+    color: #c8d0e0;
 }
 
-#menu > .option-list--option-highlighted {
-    background: transparent;
-    color: #e2e8f0;
+/* Focused (keyboard navigation) */
+.menu-item.focused {
+    background: #141a28;
+    border: round #5b8af5;
+    color: #dce4f5;
+}
+
+/* ── Left Icon ── */
+.item-icon {
+    width: 4;
+    content-align: left middle;
+    color: #4a5a7a;
     text-style: bold;
+}
+
+/* Icon when focused */
+.menu-item.focused .item-icon {
+    color: #5b8af5;
+}
+
+/* ── Middle Content ── */
+.item-body {
+    layout: vertical;
+    content-align: left middle;
+    width: 1fr;
+}
+
+/* Title */
+.item-title {
+    color: #aab8d4;
+    text-style: bold;
+}
+
+/* Title when focused */
+.menu-item.focused .item-title {
+    color: #ffffff;
+}
+
+/* Description */
+.item-desc {
+    color: #5a6a88;
+}
+
+/* ── Right Badge ── */
+.item-badge {
+    width: 12;
+    content-align: right middle;
+    color: #5b8af5;
+}
+
+/* Badge when focused */
+.menu-item.focused .item-badge {
+    color: #7aaaff;
 }

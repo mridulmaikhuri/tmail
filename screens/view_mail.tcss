@@ -9,46 +9,35 @@ Header, Footer {
     border: none;
 }
 
-/* ── Main Container ── */
 #mail-container {
-    padding: 1 2;
+    margin: 1;
 }
 
 /* ── Title ── */
 #title {
     color: #5b8af5;
     text-style: bold;
-
-    margin-bottom: 1;
-    padding-bottom: 1;
-
-    border-bottom: solid #1e2640;
 }
 
 /* ── Metadata (card style) ── */
 #metadata {
     background: #141a2e;
     border: round #2a344a;
-
     padding: 1 2;
     margin-bottom: 1;
-
     height: auto;
 }
 
 /* Metadata text */
 #metadata Static {
     color: #ffffff;
-    height: 1;
 }
 
 /* ── Email Body ── */
 #body {
     color: #ffffff;
-
     padding: 1 2;
     margin-bottom: 1;
-
     background: #0f1420;
     border: round #2a344a;
 }
@@ -57,12 +46,9 @@ Header, Footer {
 #attachment-list {
     margin-top: 1;
     margin-bottom: 1;
-
-    padding: 1;
-
+    padding: 0 1;
     border: round #2a344a;
     background: #0f1420;
-
     height: auto;
 }
 
@@ -81,30 +67,22 @@ Header, Footer {
 /* No attachment text */
 #no-attachment {
     color: #ffffff;
-
     margin-top: 1;
     margin-bottom: 1;
-
-    padding: 1 1;
-
+    padding: 0 1;
     background: #0f1420;
     border: round #2a344a;
-
     content-align: left middle;
 }
 
 /* ── Link ── */
 #link {
     margin-top: 1;
-
-    padding: 1 1;
-
+    padding: 0 1;
     color: #5b8af5;
     text-style: bold;
-
     background: #0f1420;
     border: round #2a344a;
-
     content-align: center middle;
     text-align: center;
 }

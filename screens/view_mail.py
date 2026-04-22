@@ -55,6 +55,7 @@ class ViewMail(Screen):
     
     def action_download(self):
         if not self.email['attachments']:
+            self.notify('No attachments found', severity='warning')
             return
         
         selected = self.attachment_list.index or 0
