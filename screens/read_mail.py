@@ -117,6 +117,17 @@ class ReadMail(Screen):
         preview_mail = self.query_one(PreviewMail)
         mail_list = self.query_one(MailList)
         
+        #sets the preview mail to no mail
+        preview_mail.mail = {
+            "id": '',
+            "sender": '',
+            "subject": '',
+            "date": '',
+            "body": '',
+            "attachments": '',
+            "link": ''
+        }
+        
         if preview_mail.has_class("show"):
             preview_mail.toggle_class("show")
             mail_list.toggle_class("compact")

@@ -20,15 +20,18 @@ def get_gmail_service():
     if (os.path.exists(TOKEN_PATH)):
         creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
     if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+        try:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                raise Exception("No valid creds")
+        except Exception:
+            if os.path.exists(TOKEN_PATH):
+                os.remove(TOKEN_PATH)
+
             flow = InstalledAppFlow.from_client_secrets_file(
                 CREDENTIALS_PATH, SCOPES
             )
             creds = flow.run_local_server(port=0)
-        
-        with open(TOKEN_PATH, "w") as token:
-            token.write(creds.to_json())
     service = build("gmail", "v1", credentials=creds)
     return service

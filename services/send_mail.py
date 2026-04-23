@@ -2,8 +2,16 @@ import base64
 from email.message import EmailMessage
 from googleapiclient.errors import HttpError
 from services.authenticate import get_gmail_service
+import re
+
+def is_valid_email(email: str) -> bool:
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    return re.match(pattern, email) is not None
 
 def send_mail(to, subject, body):
+    if not is_valid_email(to):
+        return False, "Invalid mail address"
+    
     service = get_gmail_service()
     message = EmailMessage()
     message["To"] = to
@@ -18,14 +26,14 @@ def send_mail(to, subject, body):
         "raw": encoded_message
     }
     try:
-        send_message = service.users().messages().send(
+        service.users().messages().send(
             userId = "me",
             body = create_message
         ).execute()
-        return True
+        return True, ""
     except HttpError as e:
         print(f"An error occured: {e}")
-        return False
+        return False, e
     
     
     

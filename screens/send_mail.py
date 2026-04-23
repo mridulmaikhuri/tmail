@@ -7,7 +7,8 @@ from services.send_mail import send_mail
 class SendMail(Screen):
     CSS_PATH = "send_mail.tcss"
     BINDINGS = [
-        ("p", "prev", "Back")
+        ("p", "prev", "Back"),
+        ("s", "send", "Send")
     ]
     
     def compose(self) -> ComposeResult:
@@ -50,12 +51,22 @@ class SendMail(Screen):
     def action_prev(self) -> None:
         self.app.pop_screen()
     
+    def handle_send(self):
+        to = self.query_one("#to", Input).value
+        subject = self.query_one("#subject", Input).value
+        body = self.query_one("#body", TextArea).text
+        res, error = send_mail(to, subject, body)
+        self.app.pop_screen()
+        if (res):
+            self.notify('Mail successfully sent')
+        else:
+            self.notify(f'Some error occured: {error}', severity='error')
+    
+    def action_send(self):
+        self.handle_send()
+    
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "send":
-            to = self.query_one("#to", Input).value
-            subject = self.query_one("#subject", Input).value
-            body = self.query_one("#body", TextArea).text
-            send_mail(to, subject, body)
-            self.app.pop_screen()
+            self.handle_send()
         elif event.button.id == "cancel":
             self.app.pop_screen()
