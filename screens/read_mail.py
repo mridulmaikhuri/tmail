@@ -71,6 +71,13 @@ class MailList(VerticalGroup):
             ListView(id="mail_list")
         )
     
+    def renumber(self, mail):
+        self.mails.remove(mail)
+        list_view = self.query_one('#mail_list', ListView)
+        for i, item in enumerate(list_view.children):
+            row = item.query_one(MailRow)
+            row.query_one('.no').update(str(i + 1))
+    
     def on_screen_resume(self) -> None:
         self.refresh_data()
 
@@ -118,7 +125,7 @@ class ReadMail(Screen):
         mail_list = self.query_one(MailList)
         
         #sets the preview mail to no mail
-        preview_mail.mail = {
+        new_mail = {
             "id": '',
             "sender": '',
             "subject": '',
@@ -127,6 +134,7 @@ class ReadMail(Screen):
             "attachments": '',
             "link": ''
         }
+        preview_mail.update_mail(new_mail)
         
         if preview_mail.has_class("show"):
             preview_mail.toggle_class("show")
@@ -136,6 +144,7 @@ class ReadMail(Screen):
         msg_id and self.run_worker(self.mark_read_worker(msg_id))
         
         event.item.remove()
+        mail_list.renumber(mail)
     
     def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
         idx = int(event.item.id.removeprefix("mail-"))
