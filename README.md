@@ -6,6 +6,13 @@ The application integrates with the **Gmail API** using OAuth authentication and
 
 ---
 
+# 📸 Demo
+
+Here’s a quick look at the application in action:
+![Demo](./assets/demo.gif)
+
+---
+
 # Features
 
 * 📥 **Read Emails**
@@ -38,6 +45,9 @@ The application integrates with the **Gmail API** using OAuth authentication and
   * `d` to download the attachment.
   * `s` to send the mail.
 
+* ⚠️ **Error notification**
+  * User is notified if any **error** occurs or operation is successful using **self.notify**
+
 * 🎨 **Terminal UI**
 
   * Built with **Textual** and **Rich** for a modern terminal experience
@@ -59,11 +69,8 @@ The application integrates with the **Gmail API** using OAuth authentication and
 ```
 tmail/
 │
-├── screenshots/
-│   ├── main_menu.png
-│   ├── inbox_view.png
-│   ├── email_viewer.png
-│   └── compose_email.png
+├── assets/
+│   └── demo.gif
 │
 ├── app.py
 │

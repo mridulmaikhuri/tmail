@@ -70,6 +70,6 @@ class ViewMail(Screen):
         )
         
         if res == True:
-            self.notify(f'Downloaded at: {file_path}')
+            self.notify(f'Downloaded at: Downloads/{filename}')
         else:
             self.notify(f"An error occured: {err}", severity='error')
