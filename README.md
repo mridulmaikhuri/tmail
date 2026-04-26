@@ -1,8 +1,6 @@
 # TMail – Terminal Gmail Client 📧
 
-TMail is a **Terminal User Interface (TUI) Gmail client** built with **Python** using the **Textual framework**. It allows users to **read and send Gmail emails directly from the terminal** through a keyboard-driven interface.
-
-The application integrates with the **Gmail API** using OAuth authentication and provides a simple yet powerful way to manage emails without leaving the terminal.
+TMail is a **Terminal User Interface (TUI) Gmail client** built with **Python** using the **Textual framework** and **Gmail API**. It allows users to **read and send Gmail emails directly from the terminal** through a keyboard-driven interface.
 
 ---
 
